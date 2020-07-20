@@ -1,6 +1,8 @@
 # Project: Memorize Your Move
 'Memorize Your Move' is my first project. It was assigned to me in an online workshop 'Python: Anybody Can Code' by Jahangirnagar University Computer Club.
 
+Google Colab link: https://colab.research.google.com/drive/1374IjekwbEIpPOG29VTcKbXJtawjBc9j?usp=sharing
+
 ## Project Idea:
 This is a console game where you (the player) will need to start from the starting coordinate and reach the ending coordinate.
 On your way to the ending coordinate, you will find obstacles and advantages.
