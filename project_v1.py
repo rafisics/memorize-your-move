@@ -28,7 +28,7 @@ Game_dict={'Easy':{'Size':10, 'Life':5, 'Jump':5, 'Obstacle':10, 'Advantage':20,
 
                      'Advantage_coordinates': []},
 
-           'Hard':{'Size':25, 'Life':10, 'Jump':15, 'Obstacls':20, 'Advantage':35,
+           'Hard':{'Size':25, 'Life':10, 'Jump':15, 'Obstacle':20, 'Advantage':35,
                    'Obstacle_coordinates':[],
 
                    'Advantage_coordinates':[] }}
