@@ -22,8 +22,7 @@ So, you need to memorize your last position and walk or jump according to that.
 
 Game Version 1 (project_v1): https://colab.research.google.com/drive/1374IjekwbEIpPOG29VTcKbXJtawjBc9j?usp=sharing
 
-Game Version 2 (project_v2): https://colab.research.google.com/drive/1O6lUd1_1NGBgvjnU68TiwQP99372skcu?usp=sharing
-
+Game Version 2 (project_v2): https://colab.research.google.com/drive/1SJ0fP8tTMpz1NexKSkUBWzhQV7jZASbC?usp=sharing
 
 In version 1: Your life-point and game point are considered same. So, your life-point changes due to the advantages or obstacles.
 
