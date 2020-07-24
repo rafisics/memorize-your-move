@@ -20,10 +20,19 @@ If you go out of the bound, you will lose one of your life.
 
 So, you need to memorize your last position and walk or jump according to that.
 
-Game Version 1 (project_v1): https://colab.research.google.com/drive/1374IjekwbEIpPOG29VTcKbXJtawjBc9j?usp=sharing
+#### Game Version 1 
+(project_v1): https://colab.research.google.com/drive/1374IjekwbEIpPOG29VTcKbXJtawjBc9j?usp=sharing
 
-Game Version 2 (project_v2): https://colab.research.google.com/drive/1SJ0fP8tTMpz1NexKSkUBWzhQV7jZASbC?usp=sharing
+Your life-point and game-point are considered same. So, your life-point changes due to the advantages or obstacles.
 
-In version 1: Your life-point and game point are considered same. So, your life-point changes due to the advantages or obstacles.
+#### Game Version 2 
+(project_v2): https://colab.research.google.com/drive/1SJ0fP8tTMpz1NexKSkUBWzhQV7jZASbC?usp=sharing
 
-In version 2: Your life-point and game point are considered different. So, your-life point doesn't change due to the advantages or obstacles.
+Your life-point and game-point are considered different. So, your-life point doesn't change due to the advantages or obstacles.
+
+#### Game Version 3
+(project_v3): https://colab.research.google.com/drive/1AYSd0Y4By5p_B_n79bTH6m0PuNIDV2TA?usp=sharing
+
+Some new features have beeen added and some errors have been fixed. 
+
+Here, the changes in your lives/points due to your moves happen the first time only. So, your lives/points won't change when you undo your move or return back to any of your passed coordinates. Also, all your past coordinates will be shown in a different color in your game state.
