@@ -1,6 +1,6 @@
 import random2
-from colorama import init, Fore, Back, Style     #[This package has helped me to generate the color in game state in windows ternimal.But not working in Google Colab. Why?]
-init()
+from colorama import init, Style
+init()           #[It generates the game state colors in windows terminal, not in Google Colab.]
 
 # Random co-ordibate generator function
 def Rand(start, end, length):
@@ -41,7 +41,7 @@ def Game_State_Sign(x,y,level):
         if (i==x and j==y):
           print("\033[0;37;44m   s ",end='  ')
         elif (list_ij in p_xy):
-          print("\033[1;33;40m   - ",end='  ')
+          print("\033[1;36;40m   - ",end='  ')
         elif (list_ij in Obstacle_list):
           print("\033[0;37;41m   * ",end='  ')
         elif (list_ij in Advantage_list):
@@ -50,8 +50,8 @@ def Game_State_Sign(x,y,level):
           print("\033[0;37;45m   e ",end='  ')
         else:
           print("\033[0;30;47m   - ",end='  ')
-      #print('\033[ \n')             #newline with default style [It works in Google Colab, but not working in windows terminal. Why!?]
-      print(Style.RESET_ALL,"\n")    #newline with default style [It works in windows terminal, but not working in  Google Colab. Why!?]
+      #print('\033[ \n')             #newline with default style [It works in Google Colab, but not in windows terminal. Why!?]
+      print(Style.RESET_ALL,"\n")    #newline with default style [It works both in windows terminal and Google Colab.]
 
 # Game state coordinate function
 def Game_State_Coordinate(x,y,level):
@@ -61,7 +61,7 @@ def Game_State_Coordinate(x,y,level):
         if (i==x and j==y):
           print("\033[0;37;44m    s ",end='  ')
         elif (list_ij in p_xy):
-          print("\033[1;33;40m {:2.0f},".format(i),j,end='  ')
+          print("\033[1;36;40m {:2.0f},".format(i),j,end='  ')
         elif (list_ij in Obstacle_list):
           print("\033[0;37;41m {:2.0f},".format(i),j,end='  ')
         elif (list_ij in Advantage_list):
@@ -70,8 +70,8 @@ def Game_State_Coordinate(x,y,level):
           print("\033[0;37;45m    e ",end='  ')
         else:
           print("\033[0;30;47m {:2.0f},".format(i),j,end='  ')
-      #print('\033[ \n')             #newline with default style [It works in Google Colab, but not working in windows terminal. Why!?]
-      print(Style.RESET_ALL,"\n")    #newline with default style [It works in windows terminal, but not working in  Google Colab. Why!?]
+      #print('\033[ \n')             #newline with default style [It works in Google Colab, but not in windows terminal. Why!?]
+      print(Style.RESET_ALL,"\n")    #newline with default style [It works both in windows terminal and Google Colab.]
 
 # Game state function
 def Game_State(x,y,level):
@@ -263,4 +263,4 @@ while (life > 0):
             Game_State(x,y, level)
             print("You have reached the end. \nYou won with ",point,"points,",life,"lives and",jump,"jumps. Congrats!\n Game is over.")
             break
-input("Press Enter key to exit")
+input("Press enter to exit.\n")
