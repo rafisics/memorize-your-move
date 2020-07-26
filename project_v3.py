@@ -18,20 +18,9 @@ def Rand(start, end, length):
     return list
 
 # Game dictionary
-Game_dict={'Easy':{'Size':10, 'Life':5, 'Jump':5, 'Obstacle':10, 'Advantage':20,
-                   'Obstacle_coordinates':[],
-
-                   'Advantage_coordinates':[]},
-
-           'Medium':{'Size':20, 'Life':8, 'Jump':10,'Obstacle':15, 'Advantage':25,
-                     'Obstacle_coordinates':[],
-
-                     'Advantage_coordinates': []},
-
-           'Hard':{'Size':25, 'Life':10, 'Jump':15, 'Obstacle':20, 'Advantage':35,
-                   'Obstacle_coordinates':[],
-
-                   'Advantage_coordinates':[] }}
+Game_dict = { 'Easy':{'Size':10, 'Life':5, 'Jump':5, 'Obstacle':10, 'Advantage':20, 'Obstacle_coordinates':[], 'Advantage_coordinates':[]},
+              'Medium':{'Size':20, 'Life':8, 'Jump':10,'Obstacle':15, 'Advantage':25, 'Obstacle_coordinates':[], 'Advantage_coordinates':[]},
+              'Hard':{'Size':25, 'Life':10, 'Jump':15, 'Obstacle':20, 'Advantage':35, 'Obstacle_coordinates':[], 'Advantage_coordinates':[]} }
 
 # Game state sign function
 def Game_State_Sign(x,y,level):
@@ -201,6 +190,7 @@ Obstacle_list = Game_dict[level]['Obstacle_coordinates']
 Advantage_list = Game_dict[level]['Advantage_coordinates']
 
 print("Welcome to level: {}".format(level))
+
 commands = ['0', '1', '2', '3', '4', '6', '8', '52', '54', '56', '58']
 list_xy = []
 for i in range(0, size):
