@@ -14,7 +14,7 @@ Obstacles will reduce your point and Advantages will increase your point.
 
 You can jump over the obstacles also. But only for fixed times.
 
-You can see your present position anytime. But for each time of seeing, you will lose one of your life.
+You can see your present coordinate anytime. But for each time of seeing your game state, you will lose one of your life.
 
 If you go out of the bound, you will lose one of your life.
 
@@ -35,4 +35,5 @@ Your life-point and game-point are considered different. So, your-life point doe
 
 Some new features have beeen added and some errors have been fixed. 
 
-Here, the changes in your lives/points due to your moves happen the first time only. So, your lives/points won't change when you undo your move or return back to any of your passed coordinates. Also, all your past coordinates will be shown in a different color in your game state.
+Here, the effect of advantage/obstacle on each coordinate works the first time only. So, your lives/points won't change when you undo your move or go back to any of your past coordinates. Also, all your past coordinates will be shown in a different color in your game state.
+
