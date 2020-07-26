@@ -2,18 +2,18 @@ import random2
 from colorama import init, Style
 init()           #[It generates the game state colors in windows terminal, not in Google Colab.]
 
-# Random co-ordibate generator function
+# Random coordinate generator function
 def Rand(start, end, length):
     list = []
     while len(list)<length:
         res = []
         for j in range(2):
             res.append(random2.randint(start, end))
-        list.append(res)
-        if [0,0] in list:
-            list.remove([0,0])
-        if [end, end] in list:
-            list.remove([end, end])
+        if res not in list:
+            list.append(res)
+        if res==[0,0] or res==[end, end]:
+            list.remove(res)
+        list = [i for i in list+obs if i in list and i not in obs]
     list.sort()
     return list
 
@@ -163,14 +163,14 @@ def Points(x,y,level,life,jump,point,command):
     return life, point
 
 #main program
-print("Welcome to 'Memorize your move' game!\n")
-print("This is a console game where you will need to start from your starting coordinate \nand need to reach your ending coordinate. On your way to the ending coordinate, you will find obstacles and advantages.\n")
+print("Welcome to the 'Memorize your move' game!\n")
+print("This is a console game where you will start from the initial coordinate and need to reach the final coordinate. \nOn your way to the ending coordinate, you will find some obstacles and advantages.\n")
 print("Game Features: \n# The game has three levels - 1) Easy, 2) Medium and 3) Hard.")
-print("# For each level, you will have fixed game state, lives and jumps \n# Obstacles will reduce your point and Advantages will increase your point.")
-print("# You can jump over the obstacles also. But only for fixed times. \n# You can see your present position anytime. But for each time of seeing, you will lose one of your life.")
+print("# For each level, you will have fixed game state, lives and jumps. \n# Obstacles will reduce your point and Advantages will increase your point.")
+print("# You can jump over the obstacles also, but only for fixed times. \n# You can see your present coordinate anytime. But for each time of seeing, you will lose one of your life.")
 print("# If you go out of the bound, you will lose one of your life.")
-print("# The effect of advantage/obstacle on each coordinate works the first time only. \n So, your lives/points won't change when you undo your move or go back to any of your past coordinates.")
-print("# So, you need to memorize your last position and walk or jump according to that.\n")
+print("# The effect of advantage/obstacle on each coordinate works the first time only. \n  That means your lives/points won't change when you undo your move or go back to any of your past coordinates.")
+print("# So, you need to memorize your coordinate, obstacles, advantages. And move or jump according to that.\n")
 print("Choose your level: \nPress 1 for Easy \nPress 2 for Medium \nPress 3 for Hard")
 
 while True:
@@ -188,8 +188,11 @@ while True:
         print("Invalid input. Try again. Choose 1, 2 or 3.")
         continue
 
+obs = []
 Game_dict[level]['Obstacle_coordinates'] = Rand(0, Game_dict[level]['Size']-1, Game_dict[level]['Obstacle'])
+obs = Game_dict[level]['Obstacle_coordinates']
 Game_dict[level]['Advantage_coordinates'] = Rand(0, Game_dict[level]['Size']-1, Game_dict[level]['Advantage'])
+adv = Game_dict[level]['Advantage_coordinates']
 
 size = Game_dict[level]['Size']
 life = Game_dict[level]['Life']
@@ -198,9 +201,6 @@ Obstacle_list = Game_dict[level]['Obstacle_coordinates']
 Advantage_list = Game_dict[level]['Advantage_coordinates']
 
 print("Welcome to level: {}".format(level))
-print("Here, you have {} lives".format(life), end=" ")
-print("and {} jumps".format(jump))
-
 commands = ['0', '1', '2', '3', '4', '6', '8', '52', '54', '56', '58']
 list_xy = []
 for i in range(0, size):
@@ -214,10 +214,14 @@ point=0
 p_xy = [[x,y]]               #This list will keep all the coordinates that the player will go through.
 
 Game_State(x,y, level)
+print("Here, you have {} lives".format(life), end=" ")
+print("and {} jumps.".format(jump))
+print("There are",len(obs),"obstacles and",len(adv),"advantages in this game state.")
+
 print("\nHow to Play: \nPress 8 to move up \nPress 2 to move down \nPress 4 to move left \nPress 6 to move right")
-print("Press 5x to jump (double move) at a specific direction. For example:\n  Press 58 to jump up; other jumps are 52, 54, 56 respectively")
-print("Press 0 to see the game state and your present position.\nPress 3 to undo your coordinate change\nPress 1 to exit the game")
-print("\nMemorize your present coordinate and obstacles ....")
+print("Press 5 and any of the move commands to jump at a specific direction:\n  Press 58 to jump up\n  Press 52 to jump down\n  Press 54 to jump left\n  Press 56 to jump right")
+print("Press 0 to see the game state and your current coordinate \nPress 3 to undo your last move\nPress 1 to exit the game")
+print("\nMemorize your present coordinate, obstacles, advantages.")
 print("\nStart making moves by pressing the command keys which are listed above.")
 
 while (life > 0):
