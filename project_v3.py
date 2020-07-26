@@ -84,22 +84,19 @@ def Game_State(x,y,level):
 # Jump function
 def Jump(command,x,y, jump):
      if jump>0:
-         if command == '56':
-             x = x
-             y = y+2
-             jump = jump - 1
-         elif command == '54':
+         if command == '56':        # Jump right
+            x = x
+            y = y+2
+         elif command == '54':      # Jump left
             x = x
             y = y-2
-            jump = jump - 1
-         elif command == '58':
+         elif command == '58':      # Jump up
             x = x-2
             y = y
-            jump = jump - 1
-         elif command == '52':
+         elif command == '52':      # Jump down
             x = x+2
             y = y
-            jump = jump - 1
+         jump = jump - 1
          print("You have only",jump,"jumps left!")
      else:
          print("Sorry, you can't jump anymore.")
@@ -107,27 +104,26 @@ def Jump(command,x,y, jump):
 
 # Move function
 def Move(command,x,y, jump):
-    commands = ['0', '1', '2', '3', '4', '6', '8', '52', '54', '56', '58']
-    if command == '6':
-      x = x
-      y = y+1
-    elif command == '4':
+    if command == '6':        # Move right
+       x = x
+       y = y+1
+    elif command == '4':      # Move left
        x = x
        y = y-1
-    elif command == '8':
+    elif command == '8':      # Move up
        x = x-1
        y = y
-    elif command == '2':
+    elif command == '2':      # Move down
        x = x+1
        y = y
-    elif command in commands[6:]:
+    elif command in commands[-4:]:
         x,y,jump = Jump(command,x,y,jump)
     elif command not in commands:
         print("Invalid command key\nThe valid command keys are:", end= " ")
         print(*commands, sep = ", ")
     return x, y, jump
 
-# Undo function [It's mot much efficient]
+# Undo function       [It's mot much efficient. If you use it twice in a row to return to previous coordinates, it won't function the second time.  #Because it stores only your last coordinates, not all your past ones.
 def Undo(x_past,y_past):
     x = x_past
     y = y_past
@@ -141,7 +137,7 @@ def Points(x,y,level,life,jump,point,command):
             life = life - 1
             print("You have seen the game state again. Your life is reduced to", life)
         elif command=='3':
-            life = life            # I am not reducing points and life points for undo move
+            life = life
             point = point
             print("You have returned to your previous coordinate by the undo command.\nSo Your lives or points haven't changed.")
         else:
@@ -160,7 +156,7 @@ def Points(x,y,level,life,jump,point,command):
                         if life>0:
                             print("Press 3 to undo this move and return back inside the game state.")
             else:
-                if command in commands[6:]:
+                if command in commands[-4:]:
                     print("So, your coordinate is not changed.")
                 else:
                     print("You have come here before.\nSo it can't change your lives or points anymore.")
@@ -169,15 +165,14 @@ def Points(x,y,level,life,jump,point,command):
 #main program
 print("Welcome to 'Memorize your move' game!\n")
 print("This is a console game where you will need to start from your starting coordinate \nand need to reach your ending coordinate. On your way to the ending coordinate, you will find obstacles and advantages.\n")
-
 print("Game Features: \n# The game has three levels - 1) Easy, 2) Medium and 3) Hard.")
 print("# For each level, you will have fixed game state, lives and jumps \n# Obstacles will reduce your point and Advantages will increase your point.")
 print("# You can jump over the obstacles also. But only for fixed times. \n# You can see your present position anytime. But for each time of seeing, you will lose one of your life.")
 print("# If you go out of the bound, you will lose one of your life.")
-print("# The changes in your lives/points due to your moves happen the first time only. \n So, your lives/points won't change when you undo your move or return back to any of your past coordinates.")
+print("# The effect of advantage/obstacle on each coordinate works the first time only. \n So, your lives/points won't change when you undo your move or go back to any of your past coordinates.")
 print("# So, you need to memorize your last position and walk or jump according to that.\n")
-
 print("Choose your level: \nPress 1 for Easy \nPress 2 for Medium \nPress 3 for Hard")
+
 while True:
     gl = input("> ",)
     if gl == '1':
@@ -201,6 +196,7 @@ life = Game_dict[level]['Life']
 jump = Game_dict[level]['Jump']
 Obstacle_list = Game_dict[level]['Obstacle_coordinates']
 Advantage_list = Game_dict[level]['Advantage_coordinates']
+
 print("Welcome to level: {}".format(level))
 print("Here, you have {} lives".format(life), end=" ")
 print("and {} jumps".format(jump))
@@ -211,19 +207,16 @@ for i in range(0, size):
     for j in range(0, size):
         list_xy.append([i,j])   #This list contains all the cordinates of the game state of the selected level.
 
-#Starting condition:
+#Starting conditions:
 x=0
 y=0
 point=0
-p_xy = []
-if [x,y] not in p_xy:
-    p_xy.append([x,y])      #This list will keep all the coordinates that the player will go through.
+p_xy = [[x,y]]               #This list will keep all the coordinates that the player will go through.
 
 Game_State(x,y, level)
 print("\nHow to Play: \nPress 8 to move up \nPress 2 to move down \nPress 4 to move left \nPress 6 to move right")
 print("Press 5x to jump (double move) at a specific direction. For example:\n  Press 58 to jump up; other jumps are 52, 54, 56 respectively")
 print("Press 0 to see the game state and your present position.\nPress 3 to undo your coordinate change\nPress 1 to exit the game")
-
 print("\nMemorize your present coordinate and obstacles ....")
 print("\nStart making moves by pressing the command keys which are listed above.")
 
@@ -240,8 +233,8 @@ while (life > 0):
         break
     elif command=='3':
         x,y = Undo(x_past, y_past)
-        life,point = Points(x,y,level,life,jump,point,command)
         #print("Your current coordinate: {}, {}".format(x,y))
+        life,point = Points(x,y,level,life,jump,point,command)
         #print("Your current point:", point)
     else:
         x_past = x
@@ -253,6 +246,7 @@ while (life > 0):
         if [x,y] not in p_xy:
             p_xy.append([x,y])
         #print(p_xy)
+
         if life==0 and x==size-1 and y==size-1:
             print("You have reached the end. But you have no life left.\n Game is over.")
             break
