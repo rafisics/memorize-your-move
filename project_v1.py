@@ -1,19 +1,19 @@
 import random2
-from colorama import init, Fore, Back, Style     #[This package has helped me to generate the color in game state in windows ternimal.But not working in Google Colab. Why?]
-init()
+from colorama import init, Style
+init()           #[It generates the game state colors in windows terminal, not in Google Colab.]
 
-# Random co-ordibate generator function
+# Random coordinate generator function
 def Rand(start, end, length):
     list = []
     while len(list)<length:
         res = []
         for j in range(2):
             res.append(random2.randint(start, end))
-        list.append(res)
-        if [0,0] in list:
-            list.remove([0,0])
-        if [end, end] in list:
-            list.remove([end, end])
+        if res not in list:
+            list.append(res)
+        if res==[0,0] or res==[end, end]:
+            list.remove(res)
+        list = [i for i in list+obs if i in list and i not in obs]
     list.sort()
     return list
 
@@ -51,8 +51,8 @@ def Game_State_Sign(x,y,level):
           print("\033[0;37;45m   e ",end='  ')
         else:
           print("\033[0;30;47m   - ",end='  ')
-      #print('\033[ \n')             #newline with default style [It works in Google Colab, but not working in windows terminal. Why!?]
-      print(Style.RESET_ALL,"\n")    #newline with default style [It works in windows terminal, but not working in  Google Colab. Why!?]
+      #print('\033[ \n')             #newline with default style [It works in Google Colab, but not in windows terminal. Why!?]
+      print(Style.RESET_ALL,"\n")    #newline with default style [It works both in windows terminal and Google Colab.]
 
 # Game state coordinate function
 def Game_State_Coordinate(x,y,level):
@@ -72,9 +72,8 @@ def Game_State_Coordinate(x,y,level):
           print("\033[0;37;45m    e ",end='  ')
         else:
           print("\033[0;30;47m {:2.0f},".format(i),j,end='  ')
-      #print('\033[ \n')             #newline with default style [It works in Google Colab, but not working in windows terminal. Why!?]
-      print(Style.RESET_ALL,"\n")    #newline with default style [It works in windows terminal, but not working in  Google Colab. Why!?]
-
+      #print('\033[ \n')             #newline with default style [It works in Google Colab, but not in windows terminal. Why!?]
+      print(Style.RESET_ALL,"\n")    #newline with default style [It works both in windows terminal and Google Colab.]
 # Game state function
 def Game_State(x,y,level):
   print("\nYour game state with sign:\n")
@@ -194,7 +193,9 @@ while True:
         print("Invalid input. Try again. Choose 1, 2 or 3.")
         continue
 
+obs = []
 Game_dict[Game_level]['Obstacle_coordinates'] = Rand(0, Game_dict[Game_level]['Size']-1, Game_dict[Game_level]['Obstacle'])
+obs = Game_dict[Game_level]['Obstacle_coordinates']
 Game_dict[Game_level]['Advantage_coordinates'] = Rand(0, Game_dict[Game_level]['Size']-1, Game_dict[Game_level]['Advantage'])
 
 size = Game_dict[Game_level]['Size']
@@ -209,12 +210,10 @@ Game_State(x,y, Game_level)
 print("\nHow to Play: \nPress 8 to move up \nPress 2 to move down \nPress 4 to move left \nPress 6 to move right")
 print("Press 5x to jump (double move) at a specific direction. For example:\n  Press 58 to jump up; other jumps are 52, 54, 56 respectively")
 print("Press 0 to see the game state and your present position.\nPress 3 to undo your coordinate change\nPress 1 to exit the game")
-
 print("\nMemorize your present coordinate and obstacles ....")
 print("\nStart making moves by pressing the command keys which are listed above.")
 while (life > 0):
     command = input("\ncommand: ")
-
     if command=='0':
         #Game_State(x,y, Game_level)
         life = Points(x,y,Game_level,life,jump,command)
@@ -246,3 +245,4 @@ while (life > 0):
             Game_State(x,y, Game_level)
             print("You have reached the end. \nYou won with",life,"life points and",jump,"jump points. Congrats!\n Game is over.")
             break
+input("Press enter to exit.\n")
