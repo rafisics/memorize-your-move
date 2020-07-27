@@ -1,6 +1,18 @@
 import random2
 from colorama import init, Style
-init()           #[It generates the game state colors in windows terminal, not in Google Colab.]
+from os import system, name
+#from IPython.display import clear_output       #[It operates my Screen Clear funtion on Google Colab, not in windows terminal]
+init()                                          #[It generates the game state colors in windows terminal, not in Google Colab.]
+
+# Screen clear function at restarting the game
+def clear():
+    # for windows (here, os.name is 'nt')
+    if name == 'nt':
+        _ = system('cls')
+    # for mac, linux or Google Colab (here, os.name is 'posix')
+    else:
+        _ = system('clear')
+        clear_output()
 
 # Random coordinate generator function
 def Rand(start, end, length):
@@ -125,6 +137,8 @@ def Points(x,y,level,life,jump,point,command):
             Game_State(x,y,level)
             life = life - 1
             print("You have seen the game state again. Your life is reduced to", life)
+            #sleep(5)
+            #clear()
         elif command=='3':
             life = life
             point = point
@@ -151,104 +165,136 @@ def Points(x,y,level,life,jump,point,command):
                     print("You have come here before.\nSo it can't change your lives or points anymore.")
     return life, point
 
-#main program
-print("Welcome to the 'Memorize your move' game!\n")
-print("This is a console game where you will start from the initial coordinate and need to reach the final coordinate. \nOn your way to the ending coordinate, you will find some obstacles and advantages.\n")
-print("Game Features: \n# The game has three levels - 1) Easy, 2) Medium and 3) Hard.")
-print("# For each level, you will have fixed game state, lives and jumps. \n# Obstacles will reduce your point and Advantages will increase your point.")
-print("# You can jump over the obstacles also, but only for fixed times. \n# You can see your present coordinate anytime. But for each time of seeing, you will lose one of your life.")
-print("# If you go out of the bound, you will lose one of your life.")
-print("# The effect of advantage/obstacle on each coordinate works the first time only. \n  That means your lives/points won't change when you undo your move or go back to any of your past coordinates.")
-print("# So, you need to memorize your coordinate, obstacles, advantages. And move or jump according to that.\n")
-print("Choose your level: \nPress 1 for Easy \nPress 2 for Medium \nPress 3 for Hard")
+while True:                #restarting loop of the main program
+    #main program
+    print("\nWelcome to the 'Memorize your move' game!\n")
+    print("This is a console game where you will start from the initial coordinate and need to reach the final coordinate. \nOn your way to the ending coordinate, you will find some obstacles and advantages.\n")
+    print("\033[1;31mGame Features:"+Style.RESET_ALL+"\n# The game has three levels - 1) Easy, 2) Medium and 3) Hard.")
+    print("# For each level, you will have fixed game state, lives and jumps. \n# Obstacles will reduce your point and Advantages will increase your point.")
+    print("# You can jump over the obstacles also, but only for fixed times. \n# You can see your present coordinate anytime. But for each time of seeing, you will lose one of your life.")
+    print("# If you go out of the bound, you will lose one of your life.")
+    print("# The effect of advantage/obstacle on each coordinate works the first time only. \n  That means your lives/points won't change when you undo your move or go back to any of your past coordinates.")
+    print("# So, you need to memorize your coordinate, obstacles, advantages. And move or jump according to that.\n")
+    print("Choose your level: \nPress 1 for Easy \nPress 2 for Medium \nPress 3 for Hard")
 
-while True:
-    gl = input("> ",)
-    if gl == '1':
-        level = 'Easy'
-        break
-    elif gl == '2':
-        level = 'Medium'
-        break
-    elif gl == '3':
-        level = 'Hard'
-        break
+    while True:
+        gl = input("> ",)
+        if gl == '1':
+            level = 'Easy'
+            break
+        elif gl == '2':
+            level = 'Medium'
+            break
+        elif gl == '3':
+            level = 'Hard'
+            break
+        else:
+            print("Invalid input. Try again. Choose 1, 2 or 3.")
+            continue
+
+    obs = []
+    Game_dict[level]['Obstacle_coordinates'] = Rand(0, Game_dict[level]['Size']-1, Game_dict[level]['Obstacle'])
+    obs = Game_dict[level]['Obstacle_coordinates']
+    Game_dict[level]['Advantage_coordinates'] = Rand(0, Game_dict[level]['Size']-1, Game_dict[level]['Advantage'])
+    adv = Game_dict[level]['Advantage_coordinates']
+
+    size = Game_dict[level]['Size']
+    life = Game_dict[level]['Life']
+    jump = Game_dict[level]['Jump']
+    Obstacle_list = Game_dict[level]['Obstacle_coordinates']
+    Advantage_list = Game_dict[level]['Advantage_coordinates']
+
+    print("There are two game modes: \n (a) Simple Mode: All your commands and outputs will remain visible until the game ends.\n (b) Complex Mode: The output of your previous command will remain visible until giving the next command.")
+    print("Choose your mode: \nPress a for Simple \nPress b for Complex")
+
+    while True:
+        gm = input("> ",)
+        if gm == 'a':
+            mode = 'Simple'
+            break
+        elif gm == 'b':
+            mode = 'Complex'
+            break
+        else:
+            print("Invalid input. Try again. Choose a or b.")
+            continue
+
+    print("\nWelcome to - Level: "+level+" ("+mode+" Mode)")
+    commands = ['0', '1', '2', '3', '4', '6', '8', '52', '54', '56', '58']
+    list_xy = []
+    for i in range(0, size):
+        for j in range(0, size):
+            list_xy.append([i,j])   #This list contains all the cordinates of the game state of the selected level.
+
+    #Starting conditions:
+    x=0
+    y=0
+    point=0
+    p_xy = [[x,y]]               #This list will keep all the coordinates that the player will go through.
+
+    Game_State(x,y, level)
+    print("Here, you have {} lives".format(life), end=" ")
+    print("and {} jumps.".format(jump))
+    print("There are",len(obs),"obstacles and",len(adv),"advantages in this game state.\n\n\033[1;31mYour target is to avoid every obstacle and go through all the advantages.\nBy doing so, you can achieve",10*(len(adv)),"points maximum before reaching the ending coordinate."+Style.RESET_ALL)
+    print("\n\033[1;31mHow to play:"+Style.RESET_ALL+"\nPress 8 to move up \nPress 2 to move down \nPress 4 to move left \nPress 6 to move right")
+    print("Press 5 and any of the move commands to jump at a specific direction:\n  Press 58 to jump up\n  Press 52 to jump down\n  Press 54 to jump left\n  Press 56 to jump right")
+    print("Press 0 to see the game state and your current coordinate \nPress 3 to undo your last move\nPress 1 to exit the game")
+    if mode=='Complex':
+        print("\n\033[1;31mAs you have selected the Complex Mode, all your previous command outputs (including the game state) are gonna disappper when you give the next command. \nSo, before giving the first command, carefully read the game rules and memorize your coordinate, obstacles, advantages."+Style.RESET_ALL)
+        print("\nIf you are ready.....")
     else:
-        print("Invalid input. Try again. Choose 1, 2 or 3.")
+        print("\nMemorize your coordinate, obstacles, advantages.")
+    print("\nStart making moves by pressing the command keys which are listed above.")
+
+    while (life > 0):
+        command = input("\ncommand: ")
+        if mode=='Complex':
+            clear()
+        if command=='0':
+            life,point = Points(x,y,level,life,jump,point,command)
+            print("Your current point:", point)
+            if life==0:
+                print("You lost with",jump,"jumps.\n\033[1;31mGAME OVER"+Style.RESET_ALL)
+                break
+        elif command=='1':
+            print("\nYou have exited the game.\n \033[1;31m-- END --"+Style.RESET_ALL)
+            break
+        elif command=='3':
+            x,y = Undo(x_past, y_past)
+            #print("Your current coordinate: {}, {}".format(x,y))
+            life,point = Points(x,y,level,life,jump,point,command)
+            #print("Your current point:", point)
+        else:
+            x_past = x
+            y_past = y
+            x,y,jump = Move(command,x,y,jump)
+            #print("Your current coordinate: {}, {}".format(x,y))
+            life,point = Points(x,y,level,life,jump,point,command)
+            #print("Your current point:", point)
+            if [x,y] not in p_xy:
+                p_xy.append([x,y])
+            #print(p_xy)
+
+            if life==0 and x==size-1 and y==size-1:
+                print("You have reached the end. But you have no life left.\n\033[1;31mGAME OVER"+Style.RESET_ALL)
+                break
+            elif life==0:
+                print("You lost with",point,"points and",jump,"jumps.\n\033[1;31mGAME OVER"+Style.RESET_ALL)
+                break
+            elif (x==size-1 and y==size-1):
+                Game_State(x,y, level)
+                print("You have reached the end. \nYou won with ",point,"points (out of",10*(len(adv)),"points),",life,"lives and",jump,"jumps. Congrats!\n \033[1;31m-- END --"+Style.RESET_ALL)
+                break
+
+    while True:
+        print("\n*********************************************************************************\n")
+        answer = input("Wanna play again? \n(y/n): ")
+        if answer in ('y', 'n'):
+            break
+        print("Invalid input. Type y or n")
+    if answer == 'y':
+        clear()
         continue
-
-obs = []
-Game_dict[level]['Obstacle_coordinates'] = Rand(0, Game_dict[level]['Size']-1, Game_dict[level]['Obstacle'])
-obs = Game_dict[level]['Obstacle_coordinates']
-Game_dict[level]['Advantage_coordinates'] = Rand(0, Game_dict[level]['Size']-1, Game_dict[level]['Advantage'])
-adv = Game_dict[level]['Advantage_coordinates']
-
-size = Game_dict[level]['Size']
-life = Game_dict[level]['Life']
-jump = Game_dict[level]['Jump']
-Obstacle_list = Game_dict[level]['Obstacle_coordinates']
-Advantage_list = Game_dict[level]['Advantage_coordinates']
-
-print("Welcome to level: {}".format(level))
-
-commands = ['0', '1', '2', '3', '4', '6', '8', '52', '54', '56', '58']
-list_xy = []
-for i in range(0, size):
-    for j in range(0, size):
-        list_xy.append([i,j])   #This list contains all the cordinates of the game state of the selected level.
-
-#Starting conditions:
-x=0
-y=0
-point=0
-p_xy = [[x,y]]               #This list will keep all the coordinates that the player will go through.
-
-Game_State(x,y, level)
-print("Here, you have {} lives".format(life), end=" ")
-print("and {} jumps.".format(jump))
-print("There are",len(obs),"obstacles and",len(adv),"advantages in this game state.")
-
-print("\nHow to Play: \nPress 8 to move up \nPress 2 to move down \nPress 4 to move left \nPress 6 to move right")
-print("Press 5 and any of the move commands to jump at a specific direction:\n  Press 58 to jump up\n  Press 52 to jump down\n  Press 54 to jump left\n  Press 56 to jump right")
-print("Press 0 to see the game state and your current coordinate \nPress 3 to undo your last move\nPress 1 to exit the game")
-print("\nMemorize your present coordinate, obstacles, advantages.")
-print("\nStart making moves by pressing the command keys which are listed above.")
-
-while (life > 0):
-    command = input("\ncommand: ")
-    if command=='0':
-        life,point = Points(x,y,level,life,jump,point,command)
-        print("Your current point:", point)
-        if life==0:
-            print("You lost with",jump,"jumps.\n Game is over.")
-            break
-    elif command=='1':
-        print("Game is stopped.")
-        break
-    elif command=='3':
-        x,y = Undo(x_past, y_past)
-        #print("Your current coordinate: {}, {}".format(x,y))
-        life,point = Points(x,y,level,life,jump,point,command)
-        #print("Your current point:", point)
     else:
-        x_past = x
-        y_past = y
-        x,y,jump = Move(command,x,y,jump)
-        #print("Your current coordinate: {}, {}".format(x,y))
-        life,point = Points(x,y,level,life,jump,point,command)
-        #print("Your current point:", point)
-        if [x,y] not in p_xy:
-            p_xy.append([x,y])
-        #print(p_xy)
-
-        if life==0 and x==size-1 and y==size-1:
-            print("You have reached the end. But you have no life left.\n Game is over.")
-            break
-        elif life==0:
-            print("You lost with",point,"points and",jump,"jumps.\n Game is over.")
-            break
-        elif (x==size-1 and y==size-1):
-            Game_State(x,y, level)
-            print("You have reached the end. \nYou won with ",point,"points,",life,"lives and",jump,"jumps. Congrats!\n Game is over.")
-            break
-input("Press enter to exit.\n")
+        print("\n                               ********Goodbye********")
+        break
