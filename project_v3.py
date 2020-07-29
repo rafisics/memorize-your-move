@@ -40,19 +40,19 @@ def Game_State_Sign(x,y,level):
       for j in range(0, size):
         list_ij=[i,j]
         if (i==x and j==y):
-          print("\033[0;37;44m   s ",end='  ')
+          print("\033[0;37;44m  s",end='  ')
         elif (list_ij in p_xy):
-          print("\033[1;36;40m   - ",end='  ')
+          print("\033[1;36;40m  -",end='  ')
         elif (list_ij in Obstacle_list):
-          print("\033[0;37;41m   * ",end='  ')
+          print("\033[0;37;41m  *",end='  ')
         elif (list_ij in Advantage_list):
-          print("\033[0;37;42m   + ",end='  ')
+          print("\033[0;37;42m  +",end='  ')
         elif (i==size-1 and j==size-1):
-          print("\033[0;37;45m   e ",end='  ')
+          print("\033[0;37;45m  e",end='  ')
         else:
-          print("\033[0;30;47m   - ",end='  ')
+          print("\033[0;30;47m  -",end='  ')
       #print('\033[ \n')             #newline with default style [It works in Google Colab, but not in windows terminal. Why!?]
-      print(Style.RESET_ALL,"\n")    #newline with default style [It works both in windows terminal and Google Colab.]
+      print(Style.RESET_ALL)         #return to default style [It works both in windows terminal and Google Colab.]
 
 # Game state coordinate function
 def Game_State_Coordinate(x,y,level):
@@ -60,26 +60,27 @@ def Game_State_Coordinate(x,y,level):
       for j in range(0, size):
         list_ij=[i,j]
         if (i==x and j==y):
-          print("\033[0;37;44m    s ",end='  ')
+          print("\033[0;37;44m   s  "+Style.RESET_ALL+' ',end='')
         elif (list_ij in p_xy):
-          print("\033[1;36;40m {:2.0f},".format(i),j,end='  ')
+          print("\033[1;36;40m{:2.0f},".format(i),j,Style.RESET_ALL+' ',end='')
         elif (list_ij in Obstacle_list):
-          print("\033[0;37;41m {:2.0f},".format(i),j,end='  ')
+          print("\033[0;37;41m{:2.0f},".format(i),j,Style.RESET_ALL+' ',end='')
         elif (list_ij in Advantage_list):
-          print("\033[0;37;42m {:2.0f},".format(i),j,end='  ')
+          print("\033[0;37;42m{:2.0f},".format(i),j,Style.RESET_ALL+' ',end='')
         elif (i==size-1 and j==size-1):
-          print("\033[0;37;45m    e ",end='  ')
+          print("\033[0;37;45m   e  "+Style.RESET_ALL+' ',end='')
         else:
-          print("\033[0;30;47m {:2.0f},".format(i),j,end='  ')
+          print("\033[0;30;47m{:2.0f},".format(i),j,Style.RESET_ALL+' ',end='')
       #print('\033[ \n')             #newline with default style [It works in Google Colab, but not in windows terminal. Why!?]
-      print(Style.RESET_ALL,"\n")    #newline with default style [It works both in windows terminal and Google Colab.]
+      print(Style.RESET_ALL,"\n")    #newline with to with default style [It works both in windows terminal and Google Colab.]
 
 # Game state function
 def Game_State(x,y,level):
-  print("\nYour game state with sign:\n")
+  print("\nYour current game state with sign:\n")
   Game_State_Sign(x,y,level)
-  print("\nYour game state with coordinate:\n")
-  Game_State_Coordinate(x,y,level)
+  if level != 'Hard':
+      print("\nYour current game state with coordinate:\n")
+      Game_State_Coordinate(x,y,level)
   print("\nYour current coordinate: {}, {}".format(x,y))
 
 # Jump function
@@ -130,15 +131,13 @@ def Undo(x_past,y_past):
     y = y_past
     return x,y
 
-# Point function [ I tried to apply Game_Denoter concept. But in doing so, my Point function became complicated and was giving wrong output.]
+# Point function       [ I tried to apply Game_Denoter concept. But in doing so, my Point function became complicated and was giving wrong output.]
 def Points(x,y,level,life,jump,point,command):
     if command in commands:
         if command=='0':
             Game_State(x,y,level)
             life = life - 1
             print("You have seen the game state again. Your life is reduced to", life)
-            #sleep(5)
-            #clear()
         elif command=='3':
             life = life
             point = point
@@ -167,7 +166,7 @@ def Points(x,y,level,life,jump,point,command):
 
 while True:                #restarting loop of the main program
     #main program
-    print("\nWelcome to the 'Memorize your move' game!\n")
+    print("\n\033[1;31mWelcome to the 'Memorize your move' game!\n"+Style.RESET_ALL)
     print("This is a console game where you will start from the initial coordinate and need to reach the final coordinate. \nOn your way to the ending coordinate, you will find some obstacles and advantages.\n")
     print("\033[1;31mGame Features:"+Style.RESET_ALL+"\n# The game has three levels - 1) Easy, 2) Medium and 3) Hard.")
     print("# For each level, you will have fixed game state, lives and jumps. \n# Obstacles will reduce your point and Advantages will increase your point.")
@@ -175,7 +174,7 @@ while True:                #restarting loop of the main program
     print("# If you go out of the bound, you will lose one of your life.")
     print("# The effect of advantage/obstacle on each coordinate works the first time only. \n  That means your lives/points won't change when you undo your move or go back to any of your past coordinates.")
     print("# So, you need to memorize your coordinate, obstacles, advantages. And move or jump according to that.\n")
-    print("Choose your level: \nPress 1 for Easy \nPress 2 for Medium \nPress 3 for Hard")
+    print("\033[1;31mChoose your level:"+Style.RESET_ALL+" \nPress 1 for Easy \nPress 2 for Medium \nPress 3 for Hard")
 
     while True:
         gl = input("> ",)
@@ -205,7 +204,7 @@ while True:                #restarting loop of the main program
     Advantage_list = Game_dict[level]['Advantage_coordinates']
 
     print("There are two game modes: \n (a) Simple Mode: All your commands and outputs will remain visible until the game ends.\n (b) Complex Mode: The output of your previous command will remain visible until giving the next command.")
-    print("Choose your mode: \nPress a for Simple \nPress b for Complex")
+    print("\n\033[1;31mChoose your mode:"+Style.RESET_ALL+" \nPress a for Simple \nPress b for Complex")
 
     while True:
         gm = input("> ",)
@@ -231,11 +230,12 @@ while True:                #restarting loop of the main program
     y=0
     point=0
     p_xy = [[x,y]]               #This list will keep all the coordinates that the player will go through.
-
     Game_State(x,y, level)
+
     print("Here, you have {} lives".format(life), end=" ")
     print("and {} jumps.".format(jump))
     print("There are",len(obs),"obstacles and",len(adv),"advantages in this game state.\n\n\033[1;31mYour target is to avoid every obstacle and go through all the advantages.\nBy doing so, you can achieve",10*(len(adv)),"points maximum before reaching the ending coordinate."+Style.RESET_ALL)
+
     print("\n\033[1;31mHow to play:"+Style.RESET_ALL+"\nPress 8 to move up \nPress 2 to move down \nPress 4 to move left \nPress 6 to move right")
     print("Press 5 and any of the move commands to jump at a specific direction:\n  Press 58 to jump up\n  Press 52 to jump down\n  Press 54 to jump left\n  Press 56 to jump right")
     print("Press 0 to see the game state and your current coordinate \nPress 3 to undo your last move\nPress 1 to exit the game")
