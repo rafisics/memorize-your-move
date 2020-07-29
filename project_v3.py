@@ -1,7 +1,7 @@
 import random2
 from colorama import init, Style
 from os import system, name
-#from IPython.display import clear_output       #[It operates my Screen Clear funtion on Google Colab, not in windows terminal]
+from IPython.display import clear_output       
 init()                                          #[It generates the game state colors in windows terminal, not in Google Colab.]
 
 # Screen clear function at restarting the game
